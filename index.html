@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>License激活统计</title>
+  <style>
+    body {
+      background-color: #EDEFF2;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .top-bar {
+      background-color: #001529;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar a {
+      color: white;
+      text-decoration: none;
+      margin-right: 20px;
+    }
+
+    .main-content {
+      display: flex;
+      flex: 1;
+    }
+
+    .sidebar {
+      background-color: #FFFFFF;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+      width: 200px;
+    }
+
+    .sidebar h2 {
+      margin-top: 0;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 10px;
+    }
+
+    .sidebar a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    .sidebar a.active {
+      font-weight: bold;
+    }
+
+    .content {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-top: 0;
+    }
+
+    .user-info {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .filter-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+
+    .filter-item label {
+      margin-right: 10px;
+    }
+
+    .filters select, .filters input[type="date"] {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .filters button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: #1890FF;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .filters button:hover {
+      background-color: #007BFF;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .totals {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination a {
+      color: #333;
+      text-decoration: none;
+      padding: 8px 12px;
+      margin: 0 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .pagination a.active {
+      background-color: #007BFF;
+      color: white;
+      border-color: #007BFF;
+    }
+    /* 新增的CSS样式 */
+    .info-icon {
+      margin-left: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #1890FF;
+    }
+
+    .info-icon:hover::after {
+content: "对于项目、\A品牌、\A渠道、\A cluster、\A车型\A筛选条件，只有选中上级筛选条件才可选择下一层级的筛选条件";
+background-color: #555;
+color: white;
+padding: 5px;
+border-radius: 5px;
+position: absolute;
+white-space: pre;
+transform: translateY(-100%);
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-bar">
+      <div>
+        <a href="#">首页</a>
+        <a href="#">功能</a>
+        <a href="#">数据</a>
+        <a href="#">场景</a>
+        <a href="#">项目</a>
+        <a href="#">权限</a>
+        <a href="#">消息</a>
+      </div>
+      <div class="user-info">用户: admin | <a href="#">退出</a></div>
+    </div>
+
+    <div class="main-content">
+      <div class="sidebar">
+        <h2>服务统计</h2>
+        <ul>
+          <li><a href="#" class="active">License统计</a></li>
+        </ul>
+      </div>
+      
+      <div class="content">
+        <h1>License激活统计</h1>
+        
+        <div class="filters">
+          <div class="filter-item">
+            <label for="project">项目:</label>
+            <select id="project">
+              <option value="HCP3">HCP3</option>
+              <option value="One Info">One Info</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="cluster">Cluster:</label>
+            <select id="cluster">
+              <option value="CLU45">CLU45</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="brand">品牌:</label>
+            <select id="brand">
+              <option value="奥迪">奥迪</option>
+              <option value="保时捷">保时捷</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="channel">渠道:</label>
+            <select id="channel">
+              <option value="一汽奥迪进口">一汽奥迪进口</option>
+              <option value="一汽奥迪国产">一汽奥迪国产</option>
+              <option value="上汽奥迪国产">上汽奥迪国产</option>
+              <option value="奥迪一汽新能源">奥迪一汽新能源</option>
+              <option value="保时捷进口">保时捷进口</option>
+            </select>
+          </div>
+
+          <div class="filter-item">
+            <label for="product">产品名称:</label>
+            <select id="product">
+              <option value="">选择产品</option>
+              <option value="喜马拉雅">喜马拉雅</option>
+              <option value="酷我音乐">酷我音乐</option>
+              <option value="爱奇艺">爱奇艺</option>
+              <option value="乐听">乐听</option>
+              <option value="乐播">乐播</option>
+            </select>
+          </div>
+          <div class="filter-item">
+            <label for="product">服务名称</label>
+            <select id="product">
+              <option value="">选择服务</option>
+              <option value="在线媒体">在线媒体</option>
+              <option value="投屏">投屏</option>
+            </select>
+          </div>
+          <div class="filter-item">
+            <label for="carModel">车型</label>
+            <select id="carModel">
+              <option value="">选择车型</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+            <span class="info-icon">ℹ️</span>
+          </div>
+          <div class="filter-item">
+            <label for="dateRange">日期范围:</label>
+            <input type="date" id="startDate" placeholder="开始日期">
+            <input type="date" id="endDate" placeholder="结束日期">
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+          <button style="background-color: #1890FF; color: white; padding: 8px 12px; border: none; border-radius: 4px; margin-left: 10px;">查询</button>
+          <button style="background-color: white; color: black; padding: 8px 12px; border: none; border-radius: 4px; margin-left: 10px;">重置</button>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+          <button style="background-color: #1890FF; color: white; padding: 8px 12px; border: none; border-radius: 4px; margin-left: 10px;">导出</button>
+          <button style="background-color: #1890FF; color: white; padding: 8px 12px; border: none; border-radius: 4px; margin-left: 10px;">导出明细</button>
+        </div>
+        <div class="totals">
+            <span>总计新增激活数: 16500</span>
+            
+          </div>
+          <div class="totals">
+            
+            <span>总计累计激活数: 165000</span>
+          </div>
+        <table>
+          <thead>
+            <tr>
+              <th>服务名称</th>
+              <th>产品名称</th>
+              <th>终端类型</th>
+              <th>项目</th>
+              <th>Cluster</th>
+              <th>品牌</th>
+              <th>渠道</th>
+              <th>车型</th>
+              <th>新增激活数</th>
+              <th>累计激活数</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>喜马拉雅</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>一汽奥迪进口</td>
+              <td>Q6-etron</td>
+              <td>1500</td>
+              <td>15000</td>
+            </tr>
+            <tr>
+              <td>酷我音乐</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>一汽奥迪国产</td>
+              <td>A5 Limo LWB CN</td>
+              <td>2000</td>
+              <td>20000</td>
+            </tr>
+            <tr>
+              <td>爱奇艺</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>上汽奥迪国产</td>
+              <td>A5 Sportlimo LWBCS</td>
+              <td>1000</td>
+              <td>10000</td>
+            </tr>
+            <tr>
+              <td>乐听</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>奥迪一汽新能源</td>
+              <td>Q6-etron LWB</td>
+              <td>1600</td>
+              <td>16000</td>
+            </tr>
+            <tr>
+              <td>酷我音乐</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>保时捷</td>
+              <td>保时捷进口</td>
+              <td>Macan NF</td>
+              <td>2200</td>
+              <td>22000</td>
+            </tr>
+            <tr>
+              <td>喜马拉雅</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>一汽奥迪进口</td>
+              <td>Q5 SUV</td>
+              <td>1100</td>
+              <td>11000</td>
+            </tr>
+            <tr>
+              <td>爱奇艺</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>上汽奥迪国产</td>
+              <td>默认</td>
+              <td>1800</td>
+              <td>18000</td>
+            </tr>
+            <tr>
+              <td>酷我音乐</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>保时捷</td>
+              <td>保时捷进口</td>
+              <td>Cayenne E4</td>
+              <td>900</td>
+              <td>9000</td>
+            </tr>
+            <tr>
+              <td>乐听</td>
+              <td>在线媒体</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>奥迪一汽新能源</td>
+              <td>A6-etron Limo</td>
+              <td>1700</td>
+              <td>17000</td>
+            </tr>
+            <tr>
+              <td>乐播</td>
+              <td>投屏</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>一汽奥迪国产</td>
+              <td>Q5 SUV LWBCN</td>
+              <td>1400</td>
+              <td>14000</td>
+            </tr>
+            <tr>
+              <td>乐听</td>
+              <td>投屏</td>
+              <td>车机</td>
+              <td>HCP3</td>
+              <td>CLU45</td>
+              <td>奥迪</td>
+              <td>奥迪一汽新能源</td>
+              <td>A6-etron Limo</td>
+              <td>1300</td>
+              <td>13000</td>
+            </tr>
+          </tbody>
+        </table>
+        
+
+        <div class="pagination">
+          <a href="#">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
