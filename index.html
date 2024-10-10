@@ -125,8 +125,44 @@
       background-color: #007BFF;
     }
 
+    .tree-container ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+
+    .tree-container ul li {
+      position: relative;
+      margin-bottom: 5px;
+    }
+
+    .tree-toggle {
+      cursor: pointer;
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .tree-toggle::before {
+      content: "\25B6";
+      font-size: 12px;
+    }
+
+    .expanded > .tree-toggle::before {
+      content: "\25BC";
+    }
+
+    .nested {
+      display: none;
+    }
+
+    .expanded > .nested {
+      display: block;
+    }
+
     table {
-      width: 100%;
+      width: 90%;
       border-collapse: collapse;
       margin-bottom: 20px;
     }
@@ -135,6 +171,10 @@
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #ddd;
+    }
+
+    tr:not(:last-child) {
+      border-bottom: 2px solid #b3b3b3;
     }
 
     th {
@@ -168,25 +208,18 @@
       color: white;
       border-color: #007BFF;
     }
-    /* 新增的CSS样式 */
-    .info-icon {
-      margin-left: 5px;
-      font-size: 14px;
-      cursor: pointer;
-      color: #1890FF;
-    }
-
-    .info-icon:hover::after {
-content: "对于项目、\A品牌、\A渠道、\A cluster、\A车型\A筛选条件，只有选中上级筛选条件才可选择下一层级的筛选条件";
-background-color: #555;
-color: white;
-padding: 5px;
-border-radius: 5px;
-position: absolute;
-white-space: pre;
-transform: translateY(-100%);
-}
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggles = document.querySelectorAll('.tree-toggle');
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', (event) => {
+          const parentLi = event.target.closest('li');
+          parentLi.classList.toggle('expanded');
+        });
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -216,67 +249,135 @@ transform: translateY(-100%);
         
         <div class="filters">
           <div class="filter-item">
-            <label for="project">项目:</label>
-            <select id="project">
-              <option value="HCP3">HCP3</option>
-              <option value="One Info">One Info</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label for="cluster">Cluster:</label>
-            <select id="cluster">
-              <option value="CLU45">CLU45</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label for="brand">品牌:</label>
-            <select id="brand">
-              <option value="奥迪">奥迪</option>
-              <option value="保时捷">保时捷</option>
-            </select>
-          </div>
-
-          <div class="filter-item">
-            <label for="channel">渠道:</label>
-            <select id="channel">
-              <option value="一汽奥迪进口">一汽奥迪进口</option>
-              <option value="一汽奥迪国产">一汽奥迪国产</option>
-              <option value="上汽奥迪国产">上汽奥迪国产</option>
-              <option value="奥迪一汽新能源">奥迪一汽新能源</option>
-              <option value="保时捷进口">保时捷进口</option>
-            </select>
+            <label for="tree-filter">选择:</label>
+            <div id="tree-filter" class="tree-container">
+              <ul>
+                <li>
+                  <span class="tree-toggle"></span>
+                  <ul class="nested">
+                    <li>
+                      <span class="tree-toggle"></span>
+                      <input type="checkbox" id="project-hcp3">
+                      <label for="project-hcp3">HCP3</label>
+                      <ul class="nested">
+                        <li>
+                          <span class="tree-toggle"></span>
+                          <input type="checkbox" id="cluster-clu45">
+                          <label for="cluster-clu45">CLU45</label>
+                          <ul class="nested">
+                            <li>
+                              <span class="tree-toggle"></span>
+                              <input type="checkbox" id="brand-audi">
+                              <label for="brand-audi">奥迪</label>
+                              <ul class="nested">
+                                <li>
+                                  <span class="tree-toggle"></span>
+                                  <input type="checkbox" id="channel-yq-import">
+                                  <label for="channel-yq-import">一汽奥迪进口</label>
+                                  <ul class="nested">
+                                    <li>
+                                      <input type="checkbox" id="car-model-q6-etron">
+                                      <label for="car-model-q6-etron">Q6-etron</label>
+                                    </li>
+                                    <li>
+                                      <input type="checkbox" id="car-model-q5-suv">
+                                      <label for="car-model-q5-suv">Q5 SUV</label>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li>
+                                  <span class="tree-toggle"></span>
+                                  <input type="checkbox" id="channel-yq-nev">
+                                  <label for="channel-yq-nev">奥迪一汽新能源</label>
+                                  <ul class="nested">
+                                    <li>
+                                      <input type="checkbox" id="car-model-q6-etron-lwb">
+                                      <label for="car-model-q6-etron-lwb">Q6-etron LWB</label>
+                                    </li>
+                                    <li>
+                                      <input type="checkbox" id="car-model-a6-etron-limo">
+                                      <label for="car-model-a6-etron-limo">A6-etron Limo</label>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li>
+                                  <span class="tree-toggle"></span>
+                                  <input type="checkbox" id="channel-yq-domestic">
+                                  <label for="channel-yq-domestic">一汽奥迪国产</label>
+                                  <ul class="nested">
+                                    <li>
+                                      <input type="checkbox" id="car-model-a5-limo">
+                                      <label for="car-model-a5-limo">A5 Limo LWB CN</label>
+                                    </li>
+                                    <li>
+                                      <input type="checkbox" id="car-model-q5-suv-lwbcn">
+                                      <label for="car-model-q5-suv-lwbcn">Q5 SUV LWBCN</label>
+                                    </li>
+                                  </ul>
+                                </li>
+                                <li>
+                                  <span class="tree-toggle"></span>
+                                  <input type="checkbox" id="channel-sq-domestic">
+                                  <label for="channel-sq-domestic">上汽奥迪国产</label>
+                                  <ul class="nested">
+                                    <li>
+                                      <input type="checkbox" id="car-model-a5-sportlimo">
+                                      <label for="car-model-a5-sportlimo">A5 Sportlimo LWBCS</label>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </li>
+                            <li>
+                              <span class="tree-toggle"></span>
+                              <input type="checkbox" id="brand-porsche">
+                              <label for="brand-porsche">保斯捷</label>
+                              <ul class="nested">
+                                <li>
+                                  <span class="tree-toggle"></span>
+                                  <input type="checkbox" id="channel-porsche-import">
+                                  <label for="channel-porsche-import">保斯捷进口</label>
+                                  <ul class="nested">
+                                    <li>
+                                      <input type="checkbox" id="car-model-macan-nf">
+                                      <label for="car-model-macan-nf">Macan NF</label>
+                                    </li>
+                                    <li>
+                                      <input type="checkbox" id="car-model-cayenne-e4">
+                                      <label for="car-model-cayenne-e4">Cayenne E4</label>
+                                    </li>
+                                  </ul>
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div class="filter-item">
             <label for="product">产品名称:</label>
             <select id="product">
               <option value="">选择产品</option>
-              <option value="喜马拉雅">喜马拉雅</option>
-              <option value="酷我音乐">酷我音乐</option>
-              <option value="爱奇艺">爱奇艺</option>
-              <option value="乐听">乐听</option>
-              <option value="乐播">乐播</option>
+              <option value="在线媒体">在线媒体</option>
+              <option value="投屏">投屏</option>
             </select>
           </div>
           <div class="filter-item">
             <label for="product">服务名称</label>
             <select id="product">
               <option value="">选择服务</option>
-              <option value="在线媒体">在线媒体</option>
-              <option value="投屏">投屏</option>
+              <option value="喜马拉雅">喜马拉雅</option>
+              <option value="酷我音乐">酷我音乐</option>
+              <option value="爱奇艺">爱奇艺</option>
+              <option value="乐听">乐听</option>
+              <option value="乐播">乐播</option>
             </select>
-          </div>
-          <div class="filter-item">
-            <label for="carModel">车型</label>
-            <select id="carModel">
-              <option value="">选择车型</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="C">C</option>
-            </select>
-            <span class="info-icon">ℹ️</span>
           </div>
           <div class="filter-item">
             <label for="dateRange">日期范围:</label>
@@ -370,8 +471,8 @@ transform: translateY(-100%);
               <td>车机</td>
               <td>HCP3</td>
               <td>CLU45</td>
-              <td>保时捷</td>
-              <td>保时捷进口</td>
+              <td>保斯捷</td>
+              <td>保斯捷进口</td>
               <td>Macan NF</td>
               <td>2200</td>
               <td>22000</td>
@@ -406,8 +507,8 @@ transform: translateY(-100%);
               <td>车机</td>
               <td>HCP3</td>
               <td>CLU45</td>
-              <td>保时捷</td>
-              <td>保时捷进口</td>
+              <td>保斯捷</td>
+              <td>保斯捷进口</td>
               <td>Cayenne E4</td>
               <td>900</td>
               <td>9000</td>
